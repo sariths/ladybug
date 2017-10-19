@@ -409,7 +409,10 @@ class ColorRange(object):
                 cols = [col if isinstance(col, Color) else Color(
                     col.R, col.G, col.B) for col in cols]
             except Exception:
-                raise ValueError("%s is not a vlid color" % str(cols))
+                try:
+                    cols = [Color(col.Red, col.Green, col.Blue) for col in cols]
+                except Exception:
+                    raise ValueError("%s is not a vlid color" % str(cols))
             self._colors = cols
 
     @property
@@ -455,7 +458,11 @@ class ColorRange(object):
         """Blend between two colors based on input value."""
         rangeMinP = self._domain[colorIndex]
         rangeP = self._domain[colorIndex + 1] - rangeMinP
-        factor = (value - rangeMinP) / rangeP
+        try:
+            factor = (value - rangeMinP) / rangeP
+        except ZeroDivisionError:
+            factor = 0
+
         minColor = self.colors[colorIndex]
         maxColor = self.colors[colorIndex + 1]
         red = round(factor * (maxColor.r - minColor.r) + minColor.r)
