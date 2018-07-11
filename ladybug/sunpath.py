@@ -7,7 +7,7 @@ from .dt import DateTime
 import sys
 if (sys.version_info > (3, 0)):
     # python 3
-    from euclid3 import Vector3
+    from .euclid3 import Vector3
     xrange = range
 else:
     from euclid import Vector3
